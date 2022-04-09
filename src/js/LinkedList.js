@@ -24,7 +24,6 @@ class LinkedList{
             element = element.next;
         }
     }
-
     
     removeIf = (fn) => {
         let i = 0;

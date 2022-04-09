@@ -3,7 +3,8 @@ $(window).ready(async () => {
     let isInWord = false;
     let html = "";
     let quote_str = quote.huffman.tree.decrypt(quote.huffman.str);
-    for (let index = 0; index < quote_str; index++) {
+    for (let index = 0; index < quote_str.length; index++) {
+        console.log("hola")
         const element = quote_str[index];
         const element_type = quote.letters_state[index];
         const element_dummy = quote.dummy_text[index];
