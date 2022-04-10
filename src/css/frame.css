@@ -115,7 +115,17 @@
 }
 
 .footer p {
-    font-size: .6em;
+    font-size: .55em;
+}
+
+.footer div p:last-child {
+    color:#9c9c9c;
+}
+
+.footer div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .header p, .footer p {
