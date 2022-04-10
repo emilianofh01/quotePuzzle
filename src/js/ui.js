@@ -1,10 +1,20 @@
-$(window).ready(async () => {
-    await loadTree();
+function reloadInputValues(){
+    let quote_str = quote.huffman.tree.decrypt(quote.huffman.str);
+    $('[letter-index]').forEach(e => {
+        if($(e).attr('letter-use') == 'innerHTML'){
+            $(e).html(quote_str[$(e).attr('letter-index')]);
+        }else if($(e).attr('letter-use') == 'value'){
+            e.value = quote_str[$(e).attr('letter-index')];
+        }
+    });
+    
+}
+
+function load_inputs(){
     let isInWord = false;
     let html = "";
     let quote_str = quote.huffman.tree.decrypt(quote.huffman.str);
     for (let index = 0; index < quote_str.length; index++) {
-        console.log("hola")
         const element = quote_str[index];
         const element_type = quote.letters_state[index];
         const element_dummy = quote.dummy_text[index];
@@ -17,9 +27,9 @@ $(window).ready(async () => {
             html += "</div>"
         }
         if(element_type == '*'){
-            html += `<div class="letter_input" dummy-letter="${element_dummy}"><input maxlength="1" type="text" name="" id="letterInput" letter-index=${index}></div>`
+            html += `<div class="letter_input" dummy-letter="${element_dummy}"><input maxlength="1" type="text" name="" id="letterInput" letter-index=${index} letter-use="value"></div>`
         }else{
-            html += `<div class="fixedChar-container"><p class="fixedChar" letter-index=${index}>${element}</p></div>`
+            html += `<div class="fixedChar-container"><p class="fixedChar" letter-index=${index} letter-use="innerHTML">${element}</p></div>`
         }
     }
     
@@ -70,4 +80,9 @@ $(window).ready(async () => {
         }
         event.preventDefault();
     });
+}
+
+$(window).ready(async () => {
+    await loadTree();
+    load_inputs();
 })

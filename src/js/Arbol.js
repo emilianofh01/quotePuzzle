@@ -21,6 +21,35 @@ class HuffmanTree {
         return dict;
     }
 
+    setDictionaryValue = (key, value) => {
+        let getNode;
+        getNode = (node, str, i) => {            
+            if(node.isLeaf()){
+                if(i == str.length){
+                    return node;
+                }else{
+                    return null;
+                }
+            }
+            
+            if(i >= str.length){
+                return null;
+            }
+
+            if(str[i] == '0'){
+                return getNode(node.getLeftNode(), str, ++i);
+            }
+
+            if(str[i] == '1'){
+                return getNode(node.getRightNode(), str, ++i);
+            }
+
+            return null;
+        }
+        let node = getNode(this.root, key, 0);
+        node && node.setValue(value);
+    }
+
     decrypt = (str) => {
         let decryptRecursive;
         decryptRecursive = (root, node, str, i, r_str) => {            
