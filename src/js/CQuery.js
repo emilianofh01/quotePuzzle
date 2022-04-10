@@ -136,6 +136,17 @@ class Selector{
     removeClass(clazz){
         this.forEach(e => e.classList.remove(clazz));
     }
+
+    attr(attr, value){
+        if(value == undefined){
+            return this[0].getAttribute(attr);
+        }
+        if(value == null){
+            this.forEach(e => e.removeAttribute(attr, value));
+            return;
+        }
+        this.forEach(e => e.setAttribute(attr, value));
+    }
 }
 
 

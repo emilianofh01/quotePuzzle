@@ -22,7 +22,32 @@ $(window).ready(async () => {
             html += `<div class="fixedChar-container"><p class="fixedChar" letter-index=${index}>${element}</p></div>`
         }
     }
+    
     $("#wordsInputContainer").html(html);
+    let sortedInputs_array = [];
+    $("#letterInput").forEach((e) => {
+        sortedInputs_array.push(e);
+    })
+    $("#letterInput").on('keydown', function(event){
+        let key;
+        if (window.event) {
+            key = event.keyCode;
+        } else if (event.which) {
+            key = event.which;
+        }
+        if(key == 8 && event.target.value.length < 1){
+            event.preventDefault();
+            let letter = $(event.target).attr('letter-index');
+            for (let index = Math.min(sortedInputs_array.length - 1, letter); index >= 0; index--) {
+                if($(sortedInputs_array[index]).attr('letter-index') == letter && sortedInputs_array[index - 1]){
+                    sortedInputs_array[index - 1].value = '';
+                    sortedInputs_array[index - 1].focus();
+                    break;
+                }
+            }
+        }
+        
+    })
     $("#letterInput").on('keypress', function(event){
         let key;
         if (window.event) {
@@ -30,9 +55,18 @@ $(window).ready(async () => {
         } else if (event.which) {
             key = event.which;
         }
+
         key = String.fromCharCode(key).toUpperCase();
         if(STR_LETTERS.indexOf(key) > -1){
             event.target.value = key;
+            event.preventDefault();
+            let letter = $(event.target).attr('letter-index');
+            for (let index = Math.min(sortedInputs_array.length - 1, letter); index >= 0; index--) {
+                if($(sortedInputs_array[index]).attr('letter-index') == letter && sortedInputs_array[index + 1]){
+                    sortedInputs_array[index + 1].focus();
+                    break;
+                }
+            }
         }
         event.preventDefault();
     });
