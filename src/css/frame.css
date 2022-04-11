@@ -70,6 +70,10 @@
     left: 0;
 }
 
+.letter_input > input.selected {
+    border: 5px solid var(--text-color-light);
+}
+
 .letter_input > input:focus {
     border: 5px solid var(--text-color);
 }

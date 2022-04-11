@@ -27,7 +27,7 @@ function load_inputs(){
             html += "</div>"
         }
         if(element_type == '*'){
-            html += `<div class="letter_input" dummy-letter="${element_dummy}"><input maxlength="1" type="text" name="" id="letterInput" letter-index=${index} letter-use="value"></div>`
+            html += `<div class="letter_input" dummy-letter="${element_dummy}"><input maxlength="1" type="text" name="" id="letterInput" dummy-letter=${element_dummy} letter-index=${index} letter-use="value"></div>`
         }else{
             html += `<div class="fixedChar-container"><p class="fixedChar" letter-index=${index} letter-use="innerHTML">${element}</p></div>`
         }
@@ -38,6 +38,17 @@ function load_inputs(){
     $("#letterInput").forEach((e) => {
         sortedInputs_array.push(e);
     })
+
+    let shiftTo = (target, to)=>{
+        let letter = $(target).attr('letter-index');
+        for (let index = Math.min(sortedInputs_array.length - 1, letter); index >= 0; index--) {
+            if($(sortedInputs_array[index]).attr('letter-index') == letter && sortedInputs_array[index + to]){
+                sortedInputs_array[index + to].focus();
+                return sortedInputs_array[index + to];
+            }
+        }
+    }
+
     $("#letterInput").on('keydown', function(event){
         let key;
         if (window.event) {
@@ -47,16 +58,15 @@ function load_inputs(){
         }
         if(key == 8 && event.target.value.length < 1){
             event.preventDefault();
-            let letter = $(event.target).attr('letter-index');
-            for (let index = Math.min(sortedInputs_array.length - 1, letter); index >= 0; index--) {
-                if($(sortedInputs_array[index]).attr('letter-index') == letter && sortedInputs_array[index - 1]){
-                    sortedInputs_array[index - 1].value = '';
-                    sortedInputs_array[index - 1].focus();
-                    break;
-                }
-            }
+            let e;
+            (e = shiftTo(event.target, -1) ) && (e.value = '');
         }
-        
+        if(key == 37){
+            shiftTo(event.target, -1);
+        }
+        if(key == 39){
+            shiftTo(event.target, 1);
+        }
     })
     $("#letterInput").on('keypress', function(event){
         let key;
@@ -70,15 +80,16 @@ function load_inputs(){
         if(STR_LETTERS.indexOf(key) > -1){
             event.target.value = key;
             event.preventDefault();
-            let letter = $(event.target).attr('letter-index');
-            for (let index = Math.min(sortedInputs_array.length - 1, letter); index >= 0; index--) {
-                if($(sortedInputs_array[index]).attr('letter-index') == letter && sortedInputs_array[index + 1]){
-                    sortedInputs_array[index + 1].focus();
-                    break;
-                }
-            }
+            shiftTo(event.target, 1);
         }
         event.preventDefault();
+    });
+    $("#letterInput").on('focus', function(event){
+        $("#letterInput").removeClass('selected');
+        $(`#letterInput[dummy-letter=${$(event.target).attr('dummy-letter')}]`).addClass('selected');
+    });
+    $("#letterInput").on('blur', function(event){
+        $(`#letterInput[dummy-letter=${$(event.target).attr('dummy-letter')}]`).removeClass('selected');
     });
 }
 

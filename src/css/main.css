@@ -23,6 +23,7 @@
   --container-color: #F2F2F2;
   --frame-color: #FFFFFF;
   --text-color: #6B79FB;
+  --text-color-light: #b3bcfa;
   /* VENTE A VER MI FOREACH C:*/
   --txt-mode-color: #B8B8B8;
   --input-text-color: black;
@@ -47,6 +48,7 @@ body {
     --container-color: #161616;
     --frame-color: #202020;
     --text-color: #A9B1FE;
+    --text-color-light: #5f67be;
     --txt-mode-color: #E3A9F1;
     --input-text-color: white;
     --input-text-placeholder: #B8B8B8;
