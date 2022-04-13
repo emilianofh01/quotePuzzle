@@ -29,7 +29,7 @@ loadTree = async () => {
     for (const [key, value] of Object.entries(quote.huffman.tree.getDictionary())){
         if(STR_LETTERS.indexOf(key) == -1){
             quote.discovered_letters.push({v: key, special: true});
-        }else if(Math.random() > .6){
+        }else if(Math.random() < .6){
             quote.discovered_letters.push({v: key, special: false});
         }
     }
@@ -68,7 +68,7 @@ loadTree = async () => {
     dummy_entries = Object.entries(quote.huffman.dummy_dictionary);
     quote.dummy_text = quote.dummy_text.reduce((prev, current) => prev + dummy_entries.find(p => p[1] == current)[0], "");
     for (const [key, value] of Object.entries(quote.huffman.tree.getDictionary())){
-        if(STR_LETTERS.indexOf(key) > -1){
+        if(STR_LETTERS.indexOf(key) > -1 && quote.discovered_letters.findIndex(obj => obj.v === key) < 0){
             quote.huffman.user_tree.setDictionaryValue(value, " ");
             continue;
         }
