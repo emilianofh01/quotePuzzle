@@ -1,11 +1,11 @@
 function reloadInputValues() {
     let quote_str = quote.huffman.user_tree.decrypt(quote.huffman.str);
-    $('[letter-index]').forEach(e => {
-        if ($(e).attr('letter-use') == 'innerHTML') {
-            $(e).html(quote_str[$(e).attr('letter-index')]);
-        } else if ($(e).attr('letter-use') == 'value') {
-            e.value = quote_str[$(e).attr('letter-index')];
+    $('#letterInput').forEach(e => {
+        if (STR_LETTERS.indexOf(quote_str[$(e).attr('letter-index')]) < 0) {
+            e.value = '';
+            return;
         }
+        e.value = quote_str[$(e).attr('letter-index')];
     });
 
 }
@@ -28,7 +28,7 @@ function load_inputs() {
             html += "</div>"
         }
         if (element_type == '*') {
-            html += `<div class="letter_input" dummy-letter="${element_dummy}"><input maxlength="1" type="text" name="" id="letterInput" dummy-letter=${element_dummy} letter-index=${index} letter-use="value"></div>`
+            html += `<div class="letter_input" dummy-letter="${element_dummy}"><input maxlength="1" type="text" name="" class="letterInput" id="letterInput" dummy-letter=${element_dummy} letter-index=${index} letter-use="value"></div>`
         } else {
             html += `<div class="fixedChar-container"><p class="fixedChar" letter-index=${index} letter-use="innerHTML">${element}</p></div>`
         }
@@ -61,7 +61,8 @@ function load_inputs() {
             event.preventDefault();
             let e;
             (e = shiftTo(event.target, -1)) && (e.value = '');
-
+            quote.huffman.user_tree.setDictionaryValue(quote.huffman.user_tree.separate(quote.huffman.str)[$(e).attr("letter-index")], ' ');
+            reloadInputValues();
         }
         if (key == 37) {
             shiftTo(event.target, -1);
@@ -69,7 +70,9 @@ function load_inputs() {
         if (key == 39) {
             shiftTo(event.target, 1);
         }
+        
     })
+
     $("#letterInput").on('keypress', function (event) {
         let key;
         if (window.event) {
@@ -80,27 +83,43 @@ function load_inputs() {
 
         key = String.fromCharCode(key).toUpperCase();
         if (STR_LETTERS.indexOf(key) > -1) {
-            event.target.value = key;
-            event.preventDefault();
-            shiftTo(event.target, 1);
+            event.keyCode = key.charCodeAt(0);
+            return true;
         }
+        
         event.preventDefault();
+        
     });
-    console.log($("#letterInput"));
-    $("#letterInput").on('input', function (event) {
-        console.log("Hola")
-        if(event.target.value != quote.huffman.user_tree.decode(quote.huffman.user_tree.separate(quote.huffman.str)[$(event.target).attr("letter-index")])) {
-            quote.huffman.user_tree.setDictionaryValue(quote.huffman.user_tree.separate(quote.huffman.str)[$(event.target).attr("letter-index")], key < 32 ? '' : key);
-            reloadInputValues();
+
+    validateQuote = () => {
+        if(quote.huffman.tree.decrypt(quote.huffman.str) === quote.huffman.user_tree.decrypt(quote.huffman.str)) {
+            $("#letterInput").forEach(input => input.disabled = true);     
+            $(".letter_input").forEach(input => input.classList.add('winner'))
         }
+    }
+
+    $("#letterInput").on('input', function (event) {
+        let { value } = event.target;
+
+        if (value.length < 1) {
+            value = ' ';
+        }
+        value = event.target.value = value.toUpperCase();
+        quote.huffman.user_tree.setDictionaryValue(quote.huffman.user_tree.separate(quote.huffman.str)[$(event.target).attr("letter-index")], value);
+        reloadInputValues();
+        validateQuote();
+        shiftTo(event.target, 1);
     })
     $("#letterInput").on('focus', function (event) {
         $("#letterInput").removeClass('selected');
         $(`#letterInput[dummy-letter=${$(event.target).attr('dummy-letter')}]`).addClass('selected');
+        // event.target.setSelectionRange(event.target.value.length, event.target.value.length)
+        // console.log(event.target.value)
     });
     $("#letterInput").on('blur', function (event) {
         $(`#letterInput[dummy-letter=${$(event.target).attr('dummy-letter')}]`).removeClass('selected');
     });
+
 }
 
 $(window).ready(async () => {
