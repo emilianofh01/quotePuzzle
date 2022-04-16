@@ -140,4 +140,5 @@ startGame = async () => {
 
 $(window).ready( () => {
     startGame();
+    alert("Sabemos que puede ser dificil encontrar la frase \n asi que puedes intentar hacer click derecho y oprimir en 'inspeccionar' y en consola escribir 'quote.text'");
 })

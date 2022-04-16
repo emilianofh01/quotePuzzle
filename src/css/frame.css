@@ -50,11 +50,11 @@
     font-size: .7em;
     font-family: 'Mulish';
     border-radius: 50px;
-    background: #1e1e1e;
-    box-shadow: 14px 14px 28px #1a1a1a,
-        -14px -14px 28px #232323;
+    background: var(--tryAgain-btn-background);
+    box-shadow: 14px 14px 28px var(--tryAgain-btn-boxShadow-1),
+        -14px -14px 28px var(--tryAgain-btn-boxShadow-2);
     border: 0;
-    color: white;
+    color: var(--input-text-placeholder);
     cursor: pointer;
     transition: 0.5s ease all;
     opacity: 0;
@@ -77,9 +77,9 @@
 
 .btn_try-again:hover {
     border-radius: 50px;
-    background: #1e1e1e;
-    box-shadow: 5px -5px 10px #1a1a1a,
-        -5px 5px 10px #232323;
+    background: var(--tryAgain-btn-background);
+    box-shadow: 5px -5px 10px var(--tryAgain-btn-boxShadow-1),
+        -5px 5px 10px var(--tryAgain-btn-boxShadow-2);
     color: var(--text-color);
 }
 
