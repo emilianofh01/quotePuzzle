@@ -97,7 +97,7 @@ function load_inputs() {
             $(".letter_input").forEach(input => input.classList.add('winner'))
             $(".btn_try-again").forEach(input => {
                 input.style.display = 'unset'
-                input.addEventListener('animationend', () => input.addEventListener('click', async () => {
+                input.addEventListener('animationend', () => input.addEventListener('click', () => {
                     $(".frame")[0].classList.remove("start")
                     setTimeout(() => {
                         input.style.display = 'none';
