@@ -102,8 +102,10 @@ function load_inputs() {
                     setTimeout(() => {
                         input.style.display = 'none';
                         $(".frame")[0].classList.add("start");
-                        startGame();                  
                     }, 2000);
+                    setTimeout(() => {
+                        startGame(); 
+                    }, 1000)                  
                 }))
             })
         }
