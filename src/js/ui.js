@@ -28,7 +28,7 @@ function load_inputs() {
             html += "</div>"
         }
         if (element_type == '*') {
-            html += `<div class="letter_input" dummy-letter="${element_dummy}"><input maxlength="1" type="text" name="" class="letterInput" id="letterInput" dummy-letter=${element_dummy} letter-index=${index} letter-use="value"></div>`
+            html += `<div class="letter_input" dummy-letter="${element_dummy}"><input autocomplete="off" maxlength="1" type="text" name="" class="letterInput" id="letterInput" dummy-letter=${element_dummy} letter-index=${index} letter-use="value"></div>`
         } else {
             html += `<div class="fixedChar-container"><p class="fixedChar" letter-index=${index} letter-use="innerHTML">${element}</p></div>`
         }
@@ -95,6 +95,19 @@ function load_inputs() {
         if(quote.huffman.tree.decrypt(quote.huffman.str) === quote.huffman.user_tree.decrypt(quote.huffman.str)) {
             $("#letterInput").forEach(input => input.disabled = true);     
             $(".letter_input").forEach(input => input.classList.add('winner'))
+            $(".btn_try-again").forEach(input => {
+                input.style.display = 'unset'
+                input.addEventListener('animationend', () => input.addEventListener('click', () => {
+                    $(".frame")[0].classList.remove("start")
+                    setTimeout(() => {
+                        input.style.display = 'none';
+                        $(".frame")[0].classList.add("start");
+                    }, 2000);
+                    setTimeout(() => {
+                        startGame(); 
+                    }, 1000)                  
+                }))
+            })
         }
     }
 
@@ -113,8 +126,6 @@ function load_inputs() {
     $("#letterInput").on('focus', function (event) {
         $("#letterInput").removeClass('selected');
         $(`#letterInput[dummy-letter=${$(event.target).attr('dummy-letter')}]`).addClass('selected');
-        // event.target.setSelectionRange(event.target.value.length, event.target.value.length)
-        // console.log(event.target.value)
     });
     $("#letterInput").on('blur', function (event) {
         $(`#letterInput[dummy-letter=${$(event.target).attr('dummy-letter')}]`).removeClass('selected');
@@ -122,7 +133,11 @@ function load_inputs() {
 
 }
 
-$(window).ready(async () => {
+startGame = async () => {
     await loadTree();
     load_inputs();
+}
+
+$(window).ready( () => {
+    startGame();
 })
